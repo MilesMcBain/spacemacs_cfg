@@ -1,6 +1,6 @@
 ;;; packages.el --- ESS (R) Layer packages File for Spacemacs
 ;;
-;; Copyright (c) 2012-2016 Sylvain Benner & Contributors
+;; Copyright (c) 2012-2017 Sylvain Benner & Contributors
 ;;
 ;; Author: Sylvain Benner <sylvain.benner@gmail.com>
 ;; URL: https://github.com/syl20bnr/spacemacs
@@ -11,14 +11,11 @@
 
 (setq ess-packages
   '(
-    company
     ess
     ess-R-data-view
-    ess-R-object-popup
     ess-smart-equals
-    rainbow-delimiters
-    smartparens
-    ))
+    golden-ratio
+    org))
 
 (defun ess/init-ess ()
   (use-package ess-site
@@ -53,33 +50,24 @@
     :commands (R stata julia SAS)
     :init
     (progn
+      (spacemacs/register-repl 'ess-site 'julia)
+      (spacemacs/register-repl 'ess-site 'R)
+      (spacemacs/register-repl 'ess-site 'SAS)
+      (spacemacs/register-repl 'ess-site 'stata)
+      ;; Explicitly run prog-mode hooks since ess-mode does not derive from
+      ;; prog-mode major-mode
+      (add-hook 'ess-mode-hook 'spacemacs/run-prog-mode-hooks)
       (when (configuration-layer/package-usedp 'company)
           (add-hook 'ess-mode-hook 'company-mode))))
 
   ;; R --------------------------------------------------------------------------
   (with-eval-after-load 'ess-site
-    ;; ESS
-    (add-hook 'ess-mode-hook
-              (lambda ()
-                (ess-set-style 'C++ 'quiet)
-                ;; Because
-                ;;                                 DEF GNU BSD K&R C++
-                ;; ess-indent-level                  2   2   8   5   4
-                ;; ess-continued-statement-offset    2   2   8   5   4
-                ;; ess-brace-offset                  0   0  -8  -5  -4
-                ;; ess-arg-function-offset           2   4   0   0   0
-                ;; ess-expression-offset             4   2   8   5   4
-                ;; ess-else-offset                   0   0   0   0   0
-                ;; ess-close-brace-offset            0   0   0   0   0
-                (add-hook 'local-write-file-hooks
-                          (lambda ()
-                            (ess-nuke-trailing-whitespace)))))
-    (setq ess-nuke-trailing-whitespace-p 'ask)
-    ;; or even
-    ;; (setq ess-nuke-trailing-whitespace-p t)
-    ;; Perl
-    (add-hook 'perl-mode-hook
-              (lambda () (setq perl-indent-level 4)))
+    ;; Follow Hadley Wickham's R style guide
+    (setq ess-first-continued-statement-offset 2
+          ess-continued-statement-offset 0
+          ess-expression-offset 2
+          ess-nuke-trailing-whitespace-p t
+          ess-default-style 'DEFAULT)
 
     (defun spacemacs/ess-start-repl ()
       "Start a REPL corresponding to the ess-language of the current buffer."
@@ -90,8 +78,10 @@
        ((string= "SAS" ess-language) (call-interactively 'SAS))))
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
+      "'"  'julia
       "si" 'julia)
     (spacemacs/set-leader-keys-for-major-mode 'ess-mode
+      "'"  'spacemacs/ess-start-repl
       "si" 'spacemacs/ess-start-repl
       ;; noweb
       "cC" 'ess-eval-chunk-and-go
@@ -113,21 +103,65 @@
       "st" 'ess-eval-function
       ;; R helpers
       "hd" 'ess-R-dv-pprint
-      "hi" 'ess-R-object-popup
       "ht" 'ess-R-dv-ctable
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
-    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)))
+    (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
+    ;; Toggle underscore off no replacement of _ for <-
+    (ess-toggle-underscore nil)
+
+    ;; =====================================================================
+    ;; Tidyverse IDE
+    ;; =====================================================================
+    (defun tide-insert-pipe ()
+      "Insert a %>% and newline"
+      (interactive)
+      (insert "%>%")
+      (newline-and-indent))
+    (defun tide-insert-assign ()
+      "Insert an assignment <-"
+      (interactive)
+      (insert "<- "))
+    (define-key ess-mode-map (kbd "C-'") 'tide-insert-pipe)
+    (define-key ess-mode-map (kbd "C-\"") 'tide-insert-assign)
+
+    ;;======================================================================
+    ;; (R) markdown mode
+    ;;======================================================================
+
+    ;; Insert a new (empty) chunk to R markdown ============================
+    (defun insert-chunk ()
+      "Insert chunk environment Rmd sessions."
+      (interactive)
+      (insert "```{r}\n\n```")
+      (forward-line -1)
+      )
+    ;; key binding
+    (define-key ess-mode-map (kbd "C-c i") 'insert-chunk)
+
+    ;; Mark a word at a point ==============================================
+    ;; http://www.emacswiki.org/emacs/ess-edit.el
+    (defun ess-edit-word-at-point ()
+      (save-excursion
+        (buffer-substring
+         (+ (point) (skip-chars-backward "a-zA-Z0-9._"))
+         (+ (point) (skip-chars-forward "a-zA-Z0-9._")))))
+    ;; eval any word where the cursor is (objects, functions, etc)
+    (defun ess-eval-word ()
+      (interactive)
+      (let ((x (ess-edit-word-at-point)))
+        (ess-eval-linewise (concat x)))
+      )
+    ;; key binding
+    (define-key ess-mode-map (kbd "C-c r") 'ess-eval-word)
+    ))
+
+
+
 
 (defun ess/init-ess-R-data-view ())
 
-(defun ess/init-ess-R-object-popup ())
-
-(defun ess/post-init-rainbow-delimiters ()
-  (add-hook 'ess-mode-hook #'rainbow-delimiters-mode))
-
-;; To enable smart-equals-mode
 (defun ess/init-ess-smart-equals ()
   (use-package ess-smart-equals
     :defer t
@@ -137,12 +171,14 @@
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
 
-;; To enable smartparens-mode in ess and iess
-(defun ess/post-init-smartparens ()
-  (use-package smartparens
-    :defer t
-    :if ess-enable-smartparens
-    :init
-    (progn
-      (add-hook 'ess-mode-hook 'smartparens-mode)
-      (add-hook 'inferior-ess-mode-hook 'smartparens-mode))))
+(defun ess/pre-init-golden-ratio ()
+  (spacemacs|use-package-add-hook golden-ratio
+    :post-config
+    (dolist (f '(ess-eval-buffer-and-go
+                 ess-eval-function-and-go
+                 ess-eval-line-and-go))
+      (add-to-list 'golden-ratio-extra-commands f))))
+
+(defun ess/pre-init-org ()
+  (spacemacs|use-package-add-hook org
+    :post-config (add-to-list 'org-babel-load-languages '(R . t))))
