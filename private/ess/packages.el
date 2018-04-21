@@ -138,7 +138,7 @@
       (forward-line -1)
       )
     ;; key binding
-    (define-key ess-mode-map (kbd "C-c i") 'insert-chunk)
+    (global-set-key (kbd "C-c i") 'insert-chunk)
 
     ;; Mark a word at a point ==============================================
     ;; http://www.emacswiki.org/emacs/ess-edit.el
