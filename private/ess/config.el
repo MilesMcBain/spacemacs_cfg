@@ -14,9 +14,6 @@
 (defvar ess-enable-smart-equals nil
   "If non-nil smart-equal support is enabled")
 
-(defvar ess-enable-smartparens nil
-  "If non-nil smartparens support is enabled")
-
 ;; List of available commands to weave Rnw files. This changes the
 ;; default to pdflatex
 
