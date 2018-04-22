@@ -25,7 +25,8 @@ Layers are in the `private` directory, and now they are:
   - Adds a function to insert `%>%` and add a newline bound to `"C-'"`
   - Adds a function to insert `<- ` bound to `"C-\""`
   - Adds a function to inser an RMarkdown chunk bound to `"C-c i"`
-  - Adds a function to evaluate the current word bount to `"C-c r"`.
+  - Adds a function to evaluate the current word bound to `"C-c r"` or `", r"`.
+  - Binds a function to evaluate the current para or function to `", e"`.
   
 - `polymode`: Creates a layer to install and configure [polymode],
   adding support for R markdown (`Rmd`) files in Spacemacs.
