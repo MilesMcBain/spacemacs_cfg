@@ -93,7 +93,8 @@
       ;; REPL
       "sB" 'ess-eval-buffer-and-go
       "sb" 'ess-eval-buffer
-      "sD" 'ess-eval-function-or-paragraph-and-step
+      "e" 'ess-eval-function-or-paragraph-and-step
+      "r"  'ess-eval-word
       "sd" 'ess-eval-region-or-line-and-step
       "sL" 'ess-eval-line-and-go
       "sl" 'ess-eval-line
