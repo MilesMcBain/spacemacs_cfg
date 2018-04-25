@@ -17,7 +17,7 @@ values."
    ;; not listed in variable `dotspacemacs-configuration-layers'), `all' will
    ;; lazy install any layer that support lazy installation even the layers
    ;; listed in `dotspacemacs-configuration-layers'. `nil' doxisable the lazy
-   ;; installation feature and you have to explicitly lisecific knowledge but find herself lost in discussions about programming techniques or R language internals. The best data scientists she knows seem to be able to speak this language and it makes her anxious to learn.t a pidly being carved up among a small number of monopolistic platforms, and how the platform introduces new tendencies within capitalism that pose significant challenges to any vision of a post–capitalist future. This book will be essential reading for anyone who wants to understand how the most powerful tech companies of our time are transforming the global economy."layer in the
+   ;; installation feature and you have to explicitly list the
    ;; variable `dotspacemacs-configuration-layers' to install it.
    ;; (default 'unused)
    dotspacemacs-enable-lazy-installation 'unused
