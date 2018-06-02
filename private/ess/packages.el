@@ -95,6 +95,7 @@
       "sb" 'ess-eval-buffer
       "e" 'ess-eval-function-or-paragraph-and-step
       "r"  'ess-eval-word
+      "R" 'ess-eval-region
       "sd" 'ess-eval-region-or-line-and-step
       "sL" 'ess-eval-line-and-go
       "sl" 'ess-eval-line
@@ -102,9 +103,17 @@
       "sr" 'ess-eval-region
       "sT" 'ess-eval-function-and-go
       "st" 'ess-eval-function
-      ;; R helpers
-      "hd" 'ess-R-dv-pprint
-      "ht" 'ess-R-dv-ctable
+      ;; R data viewers
+      "vd" 'ess-R-dv-pprint
+      "vt" 'ess-R-dv-ctable
+      ;; Devtools helpers
+      "di" 'ess-r-devtools-install-package
+      "dt" 'ess-r-devtools-test-package
+      "dl" 'ess-r-devtools-load-package
+      ;; R help
+      "ho" 'ess-display-help-on-object
+      "hi" 'ess-display-index
+      "ha" 'ess-display-help-apropos
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
