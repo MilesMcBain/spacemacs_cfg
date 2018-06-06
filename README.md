@@ -4,14 +4,14 @@ Much credit goes to the orignal author @fernandomayer for putting the upstream r
 
 ## Spacemacs configuration files and private layers
 
-[Spacemacs] is a set of configurations available to power up your
-[Emacs], the best text editor in the world. Spacemacs brings a modern
-interface, and many smart defaults, so you don't have to struggle to let
-your `.emacs` the way you want (although many like the challenge).
-Anyway, Spacemacs let you configure it the same old way, but based on
-*layers*, which makes things much more organized. By the way, Spacemacs
-even let [Vim] users to use keybindings they were used to, but
-with the power of Emacs.
+[Spacemacs] is a community driven configuration distribution to power up your
+[Emacs]. Some selling points of Spacemacs: 
+
+* Modern interface, that is easier to learn as you go than [Vim] or Emacs.
+* Many smart defaults, so you don't have to struggle to get your `.emacs` the way you want.
+* Configuration model of Spacemacs is based on *layers*, which makes things much more modular and organised. 
+* Vim has influenced Spacemacs heavily, so Vim users can use keybindings they were used to,
+with the additional power of Emacs.
 
 This repository contains my `.spacemacs` file (named `spacemacs.el`) and
 some private layers.
