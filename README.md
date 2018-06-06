@@ -27,6 +27,8 @@ Layers are in the `private` directory, and now they are:
   - Adds a function to inser an RMarkdown chunk bound to `"C-c i"`
   - Adds a function to evaluate the current word bound to `"C-c r"` or `", r"`.
   - Binds a function to evaluate the current para or function to `", e"`.
+  - Adds major mode key combos for `devtools` under `d` prefix
+  - Adds major mode key combos for help under `h` prefix
   
 - `polymode`: Creates a layer to install and configure [polymode],
   adding support for R markdown (`Rmd`) files in Spacemacs.
