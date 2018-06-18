@@ -77,6 +77,12 @@
        ((string= "STA" ess-language) (call-interactively 'stata))
        ((string= "SAS" ess-language) (call-interactively 'SAS))))
 
+    (spacemacs/declare-prefix-for-mode 'ess-mode "md" "package dev")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mh" "help")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mv" "view data")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "session (REPL)")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mc" "chunks")
+
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
       "si" 'julia)
@@ -106,10 +112,13 @@
       ;; R data viewers
       "vd" 'ess-R-dv-pprint
       "vt" 'ess-R-dv-ctable
-      ;; Devtools helpers
+      ;; Package Dev helpers
       "di" 'ess-r-devtools-install-package
       "dt" 'ess-r-devtools-test-package
       "dl" 'ess-r-devtools-load-package
+      "dc" 'ess-r-devtools-check-package
+      "dd" 'ess-r-devtools-document-package
+      "df" 'ess-roxy-update-entry
       ;; R help
       "ho" 'ess-display-help-on-object
       "hi" 'ess-display-index
@@ -119,7 +128,9 @@
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
     (define-key inferior-ess-mode-map (kbd "C-k") 'comint-previous-input)
     ;; Toggle underscore off no replacement of _ for <-
-    (ess-toggle-underscore nil)
+    (setq ess-smart-S-assign-key nil)
+    ;; Stop R repl eval from blocking emacs.
+    (setq ess-eval-visibly 'nowait)
 
     ;; =====================================================================
     ;; Tidyverse IDE
