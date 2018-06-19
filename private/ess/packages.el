@@ -147,6 +147,41 @@
     (define-key ess-mode-map (kbd "C-'") 'tide-insert-pipe)
     (define-key ess-mode-map (kbd "C-\"") 'tide-insert-assign)
 
+    (defun tide-draft-rmd ()
+      "Draft a new Rmd file from a template interactively."
+      (interactive)
+      (setq rmd-file
+            (read-from-minibuffer "Rmd Filename (draft_<date>.Rmd): "
+                                  nil nil t t
+                                  (format "draft_%s.Rmd"
+                                          (string-trim
+                                           (shell-command-to-string "date --iso-8601")))))
+      (setq rmd-template
+            (read-from-minibuffer
+             (format "Draft %s from template (mmmisc/basic): " rmd-file)
+                                               nil nil t t "mmmisc/basic"))
+      (symbol-name rmd-template)
+      (string-match "\\([^/]+\\)/\\([^/]+\\)"
+                    (symbol-name rmd-template))
+      (setq template-pkg
+            (substring
+             (symbol-name rmd-template)
+             (match-beginning 1)
+             (match-end 1)))
+      (setq template-name
+            (substring
+             (symbol-name rmd-template)
+             (match-beginning 2)
+             (match-end 2)))
+      (message "Drafting using template %s from package %s" template-name template-pkg)
+      (ess-eval-linewise
+       (format "rmarkdown::draft(file = \"%s\", template = \"%s\",
+                package = \"%s\", edit = FALSE)"
+               rmd-file template-name template-pkg))
+      )
+
+
+
     ;;======================================================================
     ;; (R) markdown mode
     ;;======================================================================
