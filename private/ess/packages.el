@@ -82,6 +82,7 @@
     (spacemacs/declare-prefix-for-mode 'ess-mode "mv" "view data")
     (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "session (REPL)")
     (spacemacs/declare-prefix-for-mode 'ess-mode "mc" "chunks")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mg" "graphics")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
@@ -102,13 +103,12 @@
       "e" 'ess-eval-function-or-paragraph-and-step
       "r"  'ess-eval-word
       "R" 'ess-eval-region
+      "sp" 'ess-eval-paragraph-and-step
       "sd" 'ess-eval-region-or-line-and-step
-      "sL" 'ess-eval-line-and-go
       "sl" 'ess-eval-line
-      "sR" 'ess-eval-region-and-go
       "sr" 'ess-eval-region
-      "sT" 'ess-eval-function-and-go
       "st" 'ess-eval-function
+      "sw" 'ess-set-working-directory
       ;; R data viewers
       "vd" 'ess-R-dv-pprint
       "vt" 'ess-R-dv-ctable
@@ -123,6 +123,15 @@
       "ho" 'ess-display-help-on-object
       "hi" 'ess-display-index
       "ha" 'ess-display-help-apropos
+      ;; Graphics devices
+      "gn" 'tide-new-gdev
+      "gc" 'tide-cur-gdev
+      "gs" 'tide-switch-to-gdev
+      "gl" 'tide-list-all-gdev
+      "gp" 'tide-save-gdev-pdf
+      "gc" 'tide-capture-gdev
+      "gj" 'tide-switch-next-gdev
+      "gk" 'tide-switch-prev-gdev
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
@@ -180,7 +189,49 @@
                rmd-file template-name template-pkg))
       )
 
+    (defun tide-new-gdev ()
+      "create a new graphics device"
+      (interactive)
+      (ess-eval-linewise "dev.new()"))
 
+    (defun tide-cur-gdev ()
+      "return current graphics device"
+      (interactive)
+      (ess-eval-linewise "dev.cur()"))
+
+    (defun tide-list-all-gdev ()
+      "list all graphics devices"
+      (interactive)
+      (ess-eval-linewise "dev.list()"))
+
+    (defun tide-switch-to-gdev ()
+      "Prompt for the number of the graphics device to make current"
+      (interactive)
+      (setq dev-num
+            (read-from-minibuffer "Select R graphics device: "
+                                  nil nil t t "1"))
+      (ess-eval-linewise
+       (format "dev.set(%s)" dev-num)))
+
+    (defun tide-switch-next-gdev ()
+      "switch to next available graphics device"
+      (interactive)
+      (ess-eval-linewise "dev.set(dev.next())"))
+
+    (defun tide-switch-prev-gdev ()
+      "switch to previous available graphics device"
+      (interactive)
+      (ess-eval-linewise "dev.set(dev.prev())"))
+
+    (defun tide-save-gdev-pdf ()
+      "Save current graphics device as pdf"
+      (interactive)
+      (ess-eval-linewise "dev.copy2pdf()"))
+
+    (defun tide-capture-gdev ()
+      "Capture current graphics device as image"
+      (interactive)
+      (ess-eval-linewise "dev.capture()"))
 
     ;;======================================================================
     ;; (R) markdown mode
