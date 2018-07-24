@@ -119,6 +119,7 @@
       "dc" 'ess-r-devtools-check-package
       "dd" 'ess-r-devtools-document-package
       "df" 'ess-roxy-update-entry
+      "ds" 'tide-devtools-setup
       ;; R help
       "ho" 'ess-display-help-on-object
       "hi" 'ess-display-index
@@ -233,6 +234,10 @@
       (interactive)
       (ess-eval-linewise "dev.capture()"))
 
+    (defun tide-devtools-setup ()
+      "setup package in current directory"
+      (interactive)
+      (ess-eval-linewise "devtools::setup()"))
     ;;======================================================================
     ;; (R) markdown mode
     ;;======================================================================
