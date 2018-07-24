@@ -83,6 +83,8 @@
     (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "session (REPL)")
     (spacemacs/declare-prefix-for-mode 'ess-mode "mc" "chunks")
     (spacemacs/declare-prefix-for-mode 'ess-mode "mg" "graphics")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mr" "rmarkdown")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "shiny")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
@@ -133,6 +135,12 @@
       "gc" 'tide-capture-gdev
       "gj" 'tide-switch-next-gdev
       "gk" 'tide-switch-prev-gdev
+      ;; R Markdown
+      "rc" 'insert-chunk
+      "rr" 'tide-rmd-rend
+      "rd" 'tide-draft-rmd
+      ;; Shiny
+      "sr" 'tide-shiny-run-app
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
@@ -235,9 +243,19 @@
       (ess-eval-linewise "dev.capture()"))
 
     (defun tide-devtools-setup ()
-      "setup package in current directory"
+      "setup R package in current working directory"
       (interactive)
       (ess-eval-linewise "devtools::setup()"))
+
+    (defun tide-shiny-run-app ()
+      "Run a shiny app in the current working directory"
+      (interactive)
+      (ess-eval-linewise "shiny::runApp()"))
+
+    (defun tide-rmd-rend ()
+      "Render rmarkdown files with an interactive selection prompt"
+      (interactive)
+      (ess-eval-linewise "mmmisc::rend()"))
     ;;======================================================================
     ;; (R) markdown mode
     ;;======================================================================
