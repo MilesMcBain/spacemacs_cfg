@@ -84,7 +84,7 @@
     (spacemacs/declare-prefix-for-mode 'ess-mode "mc" "chunks")
     (spacemacs/declare-prefix-for-mode 'ess-mode "mg" "graphics")
     (spacemacs/declare-prefix-for-mode 'ess-mode "mr" "rmarkdown")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "shiny")
+    (spacemacs/declare-prefix-for-mode 'ess-mode "mS" "shiny")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
@@ -102,8 +102,9 @@
       ;; REPL
       "sB" 'ess-eval-buffer-and-go
       "sb" 'ess-eval-buffer
-      "e" 'ess-eval-function-or-paragraph-and-step
-      "r"  'ess-eval-word
+      "e" 'ess-eval-paragraph-and-step
+      "f" 'ess-eval-function
+      "o"  'ess-eval-word
       "R" 'ess-eval-region
       "sp" 'ess-eval-paragraph-and-step
       "sd" 'ess-eval-region-or-line-and-step
@@ -140,7 +141,7 @@
       "rr" 'tide-rmd-rend
       "rd" 'tide-draft-rmd
       ;; Shiny
-      "sr" 'tide-shiny-run-app
+      "Sr" 'tide-shiny-run-app
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
