@@ -327,6 +327,8 @@ you should place your code here."
   (define-key evil-normal-state-map [mouse-2] nil)
   (define-key evil-insert-state-map [mouse-2] nil)
   (define-key global-map [mouse-2] nil)
+  (spacemacs/set-leader-keys "jG" 'dumb-jump-go)
+  (spacemacs/set-leader-keys "jB" 'dumb-jump-back)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
