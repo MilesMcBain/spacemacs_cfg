@@ -104,6 +104,7 @@
       "sb" 'ess-eval-buffer
       "e" 'ess-eval-paragraph-and-step
       "f" 'ess-eval-function
+      "i" 'ess-interrupt
       "o"  'ess-eval-word
       "R" 'ess-eval-region
       "sp" 'ess-eval-paragraph-and-step
