@@ -61,7 +61,8 @@
           (add-hook 'ess-mode-hook 'company-mode))))
 
   ;; R --------------------------------------------------------------------------
-  (with-eval-after-load 'ess-site
+  (setq spacemacs/ess-config
+    '(progn
     ;; Follow Hadley Wickham's R style guide
     (setq ess-first-continued-statement-offset 2
           ess-continued-statement-offset 0
@@ -288,6 +289,9 @@
     ;; key binding
     (define-key ess-mode-map (kbd "C-c r") 'ess-eval-word)
     ))
+  
+  (eval-after-load "ess-r-mode" spacemacs/ess-config)
+  (eval-after-load "ess-julia" spacemacs/ess-config))
 
 
 
