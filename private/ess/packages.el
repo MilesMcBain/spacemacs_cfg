@@ -289,7 +289,13 @@
     ;; key binding
     (define-key ess-mode-map (kbd "C-c r") 'ess-eval-word)
     ))
-  
+
+  ;; Add fix for read-only ESS REPL
+  ;; https://github.com/emacs-ess/ESS/issues/300
+  (add-hook 'inferior-ess-mode-hook #'(lambda ()
+                                        (setq-local comint-use-prompt-regexp nil)
+                                        (setq-local inhibit-field-text-motion nil)))
+
   (eval-after-load "ess-r-mode" spacemacs/ess-config)
   (eval-after-load "ess-julia" spacemacs/ess-config))
 
