@@ -321,9 +321,6 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (global-company-mode)
-  ;;(setq ess-use-auto-complete t)
-  (setq-local comint-use-prompt-regexp nil)
-  (setq-local inhibit-field-text-motion nil)
   (define-key evil-normal-state-map [mouse-2] nil)
   (define-key evil-insert-state-map [mouse-2] nil)
   (define-key global-map [mouse-2] nil)
