@@ -115,8 +115,9 @@
       "st" 'ess-eval-function
       "sw" 'ess-set-working-directory
       ;; R data viewers
-      "vd" 'ess-R-dv-pprint
-      "vt" 'ess-R-dv-ctable
+      "vs" 'df-sample-small
+      "vm" 'df-sample-medium
+      "vl" 'df-sample-large
       ;; Package Dev helpers
       "di" 'ess-r-devtools-install-package
       "dt" 'ess-r-devtools-test-package
@@ -200,7 +201,7 @@
                 package = \"%s\", edit = FALSE)"
                rmd-file template-name template-pkg))
       )
-
+    ;; Graphics device management ;;
     (defun tide-new-gdev ()
       "create a new graphics device"
       (interactive)
@@ -245,20 +246,55 @@
       (interactive)
       (ess-eval-linewise "dev.capture()"))
 
+    ;; Devtools
     (defun tide-devtools-setup ()
       "setup R package in current working directory"
       (interactive)
       (ess-eval-linewise "devtools::setup()"))
 
+    ;; Shiny
     (defun tide-shiny-run-app ()
       "Run a shiny app in the current working directory"
       (interactive)
       (ess-eval-linewise "shiny::runApp()"))
 
+    ;; Rmarkdowm
     (defun tide-rmd-rend ()
       "Render rmarkdown files with an interactive selection prompt"
       (interactive)
       (ess-eval-linewise "mmmisc::rend()"))
+
+    ;; Data Views
+    (defun df-at-point-to-buffer (&optional numrows)
+      "output a sample of another data.frame to and jump to buffer."
+      (let ((object (symbol-at-point))
+            (r-process (ess-get-process))
+            (r-output-buffer (get-buffer-create "*R-output*"))
+            (numrows (or numrows 300)))
+        (ess-command
+         (format "mmmisc::df_preview(%s, %s)\n" object numrows)
+         r-output-buffer nil nil nil r-process)
+        (switch-to-buffer-other-window r-output-buffer)
+        ))
+
+    (defun df-sample-small ()
+      "Sample and print 30 rows of a data.frame"
+      (interactive)
+      (df-at-point-to-buffer 30)
+      )
+
+    (defun df-sample-medium ()
+      "Sample and print 300 rows of a data.frame"
+      (interactive)
+      (df-at-point-to-buffer 300)
+      )
+
+    (defun df-sample-large ()
+      "Sample and print 3000 rows of a data.frame"
+      (interactive)
+      (df-at-point-to-buffer 3000)
+      )
+
     ;;======================================================================
     ;; (R) markdown mode
     ;;======================================================================
