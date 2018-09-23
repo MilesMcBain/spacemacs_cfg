@@ -160,14 +160,13 @@
     (defun tide-insert-pipe ()
       "Insert a %>% and newline"
       (interactive)
-      (insert "%>%")
-      (newline-and-indent))
+      (insert "%>%"))
     (defun tide-insert-assign ()
       "Insert an assignment <-"
       (interactive)
       (insert "<- "))
-    (define-key ess-mode-map (kbd "C-'") 'tide-insert-pipe)
-    (define-key ess-mode-map (kbd "C-\"") 'tide-insert-assign)
+    (define-key ess-mode-map (kbd "C-\"") 'tide-insert-pipe)
+    (define-key ess-mode-map (kbd "C-'") 'tide-insert-assign)
 
     (defun tide-draft-rmd ()
       "Draft a new Rmd file from a template interactively."
