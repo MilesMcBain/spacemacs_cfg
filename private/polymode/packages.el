@@ -8,7 +8,13 @@
 ;;; Code:
 
 (defconst polymode-packages
-  '(polymode))
+  '(polymode
+    poly-R 
+    poly-markdown))
+
+(defun polymode/init-poly-R ())
+
+(defun polymode/init-poly-markdown ())
 
 (defun polymode/init-polymode ()
   (use-package polymode
