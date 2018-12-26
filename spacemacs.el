@@ -320,12 +320,25 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  (evil-add-to-alist
+   'evil-surround-pairs-alist
+   ?\( '("(" . ")")
+   ?\[ '("[" . "]")
+   ?\{ '("{" . "}")
+   ?\) '("( " . " )")
+   ?\] '("[ " . " ]")
+   ?\} '("{ " . " }"))
   (global-company-mode)
+  (setq-local comint-use-prompt-regexp nil)
+  (setq-local inhibit-field-text-motion nil)
   (define-key evil-normal-state-map [mouse-2] nil)
   (define-key evil-insert-state-map [mouse-2] nil)
   (define-key global-map [mouse-2] nil)
   (spacemacs/set-leader-keys "jG" 'dumb-jump-go)
   (spacemacs/set-leader-keys "jB" 'dumb-jump-back)
+  (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+  (global-set-key (kbd "M-[") 'sp-forward-slurp-sexp)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
