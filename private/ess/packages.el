@@ -78,19 +78,19 @@
        ((string= "STA" ess-language) (call-interactively 'stata))
        ((string= "SAS" ess-language) (call-interactively 'SAS))))
 
-    (spacemacs/declare-prefix-for-mode 'ess-mode "md" "package dev")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mh" "help")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mv" "view data")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "ms" "session (REPL)")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mc" "chunks")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mg" "graphics")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mr" "rmarkdown")
-    (spacemacs/declare-prefix-for-mode 'ess-mode "mS" "shiny")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "md" "package dev")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mh" "help")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mv" "view data")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "ms" "session (REPL)")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mc" "chunks")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mg" "graphics")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mr" "rmarkdown")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mS" "shiny")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
       "si" 'julia)
-    (spacemacs/set-leader-keys-for-major-mode 'ess-mode
+    (spacemacs/set-leader-keys-for-major-mode 'ess-r-mode
       "'"  'spacemacs/ess-start-repl
       "si" 'spacemacs/ess-start-repl
       ;; noweb
