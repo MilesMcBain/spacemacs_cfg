@@ -41,7 +41,6 @@ values."
      better-defaults
      emacs-lisp
      ess
-     common-lisp
      git
      (markdown :variables
                markdown-command "pandoc"

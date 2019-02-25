@@ -167,6 +167,9 @@
         (ess-fl-keyword:delimiters)
         (ess-fl-keyword:=)
         (ess-R-fl-keyword:F&T)))
+    ;; add directory for windows
+    (setq ess-directory-containing-R "c:")
+    (setq inferior-R-program-name "c:/R/R-3.5.2/bin/x64/Rterm.exe")
     ;; enable prettify symbols
     (add-hook 'ess-mode-hook 'prettify-symbols-mode)
 
