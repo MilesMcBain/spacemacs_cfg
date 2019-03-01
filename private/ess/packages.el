@@ -86,6 +86,7 @@
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mg" "graphics")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mr" "rmarkdown")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mS" "shiny")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mm" "make (drake)")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
@@ -145,6 +146,10 @@
       "rd" 'tide-draft-rmd
       ;; Shiny
       "Sr" 'tide-shiny-run-app
+      ;; Drake
+      "mm" 'drake-restart-make
+      "mr" 'readd-target-at-point
+      "mc" 'drake-clean
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
@@ -342,7 +347,42 @@
       )
     ;; key binding
     (define-key ess-mode-map (kbd "C-c r") 'ess-eval-word)
+
+    ;;======================================================================
+    ;; Drake
+    ;;======================================================================
+    (defun drake-make ()
+      (interactive)
+      (ess-eval-linewise "source('./make.R')"))
+
+    (defun drake-clean ()
+      (interactive)
+      (ess-eval-linewise "source('./clean.R')"))
+
+    (defun readd-target-at-point ()
+      "call drake::readd on object at point to load it into environment."
+      (interactive)
+      (let ((target (symbol-at-point)))
+            (ess-eval-linewise (format "%s <- drake::readd(%s)\n" target target))))
+
+    (defun drake-restart-make ()
+      "restart R session then run make.R"
+      (interactive)
+      (let ((r-buffer (current-buffer))
+            (r-repl-buffer (ess-get-process-buffer)))
+        (switch-to-buffer-other-window r-repl-buffer)
+        (inferior-ess-reload)
+        (switch-to-buffer-other-window r-buffer)
+        (drake-make)
+        ))
     ))
+
+  
+
+
+  ;;======================================================================
+  ;; Misc
+  ;;======================================================================
 
   ;; Add fix for read-only ESS REPL
   ;; https://github.com/emacs-ess/ESS/issues/300
