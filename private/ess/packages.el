@@ -147,7 +147,7 @@
       ;; Shiny
       "Sr" 'tide-shiny-run-app
       ;; Drake
-      "mm" 'drake-restart-make
+      "mm" 'drake-make
       "mr" 'readd-target-at-point
       "mc" 'drake-clean
       )
@@ -353,7 +353,7 @@
     ;;======================================================================
     (defun drake-make ()
       (interactive)
-      (ess-eval-linewise "source('./make.R')"))
+      (ess-eval-linewise "drake::r_make()"))
 
     (defun drake-clean ()
       (interactive)
