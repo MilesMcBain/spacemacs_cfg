@@ -82,11 +82,12 @@
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mh" "help")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mv" "view data")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "ms" "session (REPL)")
-    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mc" "chunks")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mc" "code")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mg" "graphics")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mr" "rmarkdown")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mS" "shiny")
     (spacemacs/declare-prefix-for-mode 'ess-r-mode "mm" "make (drake)")
+    (spacemacs/declare-prefix-for-mode 'ess-r-mode "mf" "function")
 
     (spacemacs/set-leader-keys-for-major-mode 'ess-julia-mode
       "'"  'julia
@@ -95,17 +96,11 @@
       "'"  'spacemacs/ess-start-repl
       "si" 'spacemacs/ess-start-repl
       ;; noweb
-      "cC" 'ess-eval-chunk-and-go
-      "cc" 'ess-eval-chunk
-      "cd" 'ess-eval-chunk-and-step
-      "cm" 'ess-noweb-mark-chunk
-      "cN" 'ess-noweb-previous-chunk
-      "cn" 'ess-noweb-next-chunk
+      "cs" 'tide-save-and-style-file
       ;; REPL
       "sB" 'ess-eval-buffer-and-go
       "sb" 'ess-eval-buffer
       "e" 'ess-eval-paragraph-and-step
-      "f" 'ess-eval-function
       "i" 'ess-interrupt
       "o"  'ess-eval-word
       "R" 'ess-eval-region
@@ -150,6 +145,10 @@
       "mm" 'drake-make
       "mr" 'readd-target-at-point
       "mc" 'drake-clean
+      ;; Fnmate
+      "ff" 'fnmate
+      "fb" 'fnmate-internal
+      "fe" 'ess-eval-function
       )
     (define-key ess-mode-map (kbd "<s-return>") 'ess-eval-line)
     (define-key inferior-ess-mode-map (kbd "C-j") 'comint-next-input)
@@ -174,7 +173,7 @@
         (ess-R-fl-keyword:F&T)))
     ;; add directory for windows
     (setq ess-directory-containing-R "c:")
-    (setq inferior-R-program-name "c:/R/R-3.5.2/bin/x64/Rterm.exe")
+    (setq inferior-R-program-name "c:/R/R-3.6.0/bin/x64/Rterm.exe")
     ;; enable prettify symbols
     (add-hook 'ess-mode-hook 'prettify-symbols-mode)
 
@@ -318,6 +317,15 @@
       (df-at-point-to-buffer 3000)
       )
 
+    ;; Styling
+    (defun tide-save-and-style-file ()
+      "Save the current buffer and style using styler"
+      (interactive)
+      (save-buffer)
+      (let ((filename (buffer-file-name)))
+        (ess-eval-linewise
+         (format "styler::style_file(\"%s\")" filename))))
+
     ;;======================================================================
     ;; (R) markdown mode
     ;;======================================================================
@@ -348,6 +356,56 @@
     ;; key binding
     (define-key ess-mode-map (kbd "C-c r") 'ess-eval-word)
 
+  ;;======================================================================
+  ;; fnmate
+  ;;======================================================================
+  (defun text-around-cursor (&optional rows-around)
+    (let ((rows-around (or rows-around 10))
+          (current-line (line-number-at-pos))
+          (initial-point (point)))
+      (save-mark-and-excursion
+        (goto-line (- current-line rows-around))
+        (set-mark (point))
+        (goto-line (+ current-line rows-around))
+        (end-of-line)
+        ;; Return a list of text, index
+        (list (buffer-substring-no-properties (mark) (point))
+              (+ (- initial-point (mark)) 1)))))
+
+  (defun strip-ess-output-junk (r-buffer)
+    (with-current-buffer r-buffer
+      (goto-char (point-min))
+      (while (re-search-forward "\\+\s" nil t)
+        (replace-match ""))))
+
+  (defun exec-r-fn-to-buffer (r_fn text)
+    (let ((r-process (ess-get-process))
+          (r-output-buffer (get-buffer-create "*R-output*")))
+      (ess-string-command
+       (format "cat(%s(%s))\n" r_fn text)
+       r-output-buffer nil)
+      (strip-ess-output-junk r-output-buffer)
+      (save-mark-and-excursion
+        (goto-char (point-max))
+        (newline)
+        (insert-buffer r-output-buffer))))
+
+  ;; fnmate functions for keybindings
+  (defun fnmate ()
+    (interactive)
+    (let* ((input-context (text-around-cursor))
+           (text (prin1-to-string (car input-context)))
+           (index (cdr input-context)))
+      (ess-eval-linewise (format "fnmate::fnmate_fn.R(%s, %s)" text index))))
+
+  (defun fnmate-internal ()
+    (interactive)
+    (let* ((input-context (text-around-cursor))
+           (text (prin1-to-string (car input-context)))
+           (index (cdr input-context))
+           (args (format "%s, %s" text index)))
+      (exec-r-fn-to-buffer "fnmate::fnmate_internal" args)))
+
     ;;======================================================================
     ;; Drake
     ;;======================================================================
@@ -376,9 +434,6 @@
         (drake-make)
         ))
     ))
-
-  
-
 
   ;;======================================================================
   ;; Misc
