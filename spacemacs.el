@@ -42,6 +42,7 @@ values."
      emacs-lisp
      ess
      git
+     csv
      (markdown :variables
                markdown-command "pandoc"
                markdown-live-preview-mode nil)
@@ -62,7 +63,8 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
    '(
-    auto-complete
+     doom-themes
+     auto-complete
     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -136,14 +138,15 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(doom-vibrant
+                         spacemacs-dark
                          spacemacs-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Hack"
-                               :size 16 :weight normal
+                               :size 18 :weight normal
                                :width normal
                                :powerline-scale 1.1)
    ;; The leader key
@@ -327,17 +330,23 @@ you should place your code here."
    ?\) '("( " . " )")
    ?\] '("[ " . " ]")
    ?\} '("{ " . " }"))
+  ; company settings
   (global-company-mode)
+  (setq company-idle-delay 120)
+  (global-set-key (kbd "<C-tab>") 'company-complete)
+  ;fix for read only R terminal
   (setq-local comint-use-prompt-regexp nil)
   (setq-local inhibit-field-text-motion nil)
   (define-key evil-normal-state-map [mouse-2] nil)
   (define-key evil-insert-state-map [mouse-2] nil)
   (define-key global-map [mouse-2] nil)
-  (spacemacs/set-leader-keys "jG" 'dumb-jump-go)
-  (spacemacs/set-leader-keys "jB" 'dumb-jump-back)
+  (spacemacs/set-leader-keys "jg" 'dumb-jump-go)
+  (spacemacs/set-leader-keys "jG" 'dumb-jump-back)
   (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
   (global-set-key (kbd "M-[") 'sp-forward-slurp-sexp)
+  (setq projectile-git-submodule-command nil) ;; Fix projectile bug on windows: https://github.com/bbatsov/projectile/issues/1302
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -349,7 +358,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (polymode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data magit-gh-pulls github-search github-clone github-browse-file gist gh marshal logito pcache ht flyspell-correct-helm flyspell-correct auto-dictionary slime-company slime common-lisp-snippets helm-company helm-c-yasnippet fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete xterm-color unfill smeargle shell-pop orgit mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit ghub let-alist with-editor eshell-z eshell-prompt-extras esh-help diff-hl ess-smart-equals ess-R-data-view ctable ess julia-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (doom-themes memoize csv-mode poly-R poly-noweb poly-markdown polymode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data magit-gh-pulls github-search github-clone github-browse-file gist gh marshal logito pcache ht flyspell-correct-helm flyspell-correct auto-dictionary slime-company slime common-lisp-snippets helm-company helm-c-yasnippet fuzzy company-statistics company auto-yasnippet yasnippet ac-ispell auto-complete xterm-color unfill smeargle shell-pop orgit mwim multi-term mmm-mode markdown-toc markdown-mode magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit ghub let-alist with-editor eshell-z eshell-prompt-extras esh-help diff-hl ess-smart-equals ess-R-data-view ctable ess julia-mode ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make projectile pkg-info epl helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
