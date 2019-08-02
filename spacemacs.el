@@ -459,16 +459,24 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+  ; company settings
   (global-company-mode)
+  (setq company-idle-delay 120)
+  (global-set-key (kbd "<C-tab>") 'company-complete)
+  ; fix for read only inferior R REPL
   (setq-local comint-use-prompt-regexp nil)
   (setq-local inhibit-field-text-motion nil)
+  ; turn off god awful mouse paste
   (define-key evil-normal-state-map [mouse-2] nil)
   (define-key evil-insert-state-map [mouse-2] nil)
   (define-key global-map [mouse-2] nil)
-  (spacemacs/set-leader-keys "jG" 'dumb-jump-go)
-  (spacemacs/set-leader-keys "jB" 'dumb-jump-back)
+  ; add custom keys for source jumps
+  (spacemacs/set-leader-keys "jg" 'dumb-jump-go)
+  (spacemacs/set-leader-keys "jG" 'dumb-jump-back)
+  ; make polymode load with md and Rmd
   (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+  ; smart parens settings
   (global-set-key (kbd "M-[") 'sp-forward-slurp-sexp)
   )
 
