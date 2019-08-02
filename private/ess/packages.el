@@ -145,6 +145,7 @@
       "mm" 'drake-make
       "mr" 'readd-target-at-point
       "mc" 'drake-clean
+      "mp" 'source-packages-file
       ;; Fnmate
       "ff" 'fnmate
       "fb" 'fnmate-internal
@@ -324,7 +325,7 @@
       (save-buffer)
       (let ((filename (buffer-file-name)))
         (ess-eval-linewise
-         (format "styler::style_file(\"%s\")" filename))))
+         (format "mmstyle::style_file(\"%s\")" filename))))
 
     ;;======================================================================
     ;; (R) markdown mode
@@ -434,6 +435,11 @@
         (drake-make)
         ))
     ))
+
+  (defun source-packages-file ()
+    "source ./packages.R"
+    (interactive)
+    (ess-eval-linewise "source('./packages.R')"))
 
   ;;======================================================================
   ;; Misc
