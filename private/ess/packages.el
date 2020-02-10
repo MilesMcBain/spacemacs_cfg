@@ -104,6 +104,7 @@
       "i" 'ess-interrupt
       "o"  'ess-eval-word
       "R" 'ess-eval-region
+      "t" 'tide-thead-at-point
       "sp" 'ess-eval-paragraph-and-step
       "sd" 'ess-eval-region-or-line-and-step
       "sl" 'ess-eval-line
@@ -136,7 +137,7 @@
       "gj" 'tide-switch-next-gdev
       "gk" 'tide-switch-prev-gdev
       ;; R Markdown
-      "rc" 'insert-chunk
+      "rc" 'polymode-eval-chunk
       "rr" 'tide-rmd-rend
       "rd" 'tide-draft-rmd
       ;; Shiny
@@ -317,6 +318,12 @@
       (interactive)
       (df-at-point-to-buffer 3000)
       )
+
+    (defun tide-thead-at-point ()
+      "call t(head()) on object at point"
+      (interactive)
+      (let ((df (symbol-at-point)))
+        (ess-eval-linewise (format "t(head(%s))\n" df))))
 
     ;; Styling
     (defun tide-save-and-style-file ()
